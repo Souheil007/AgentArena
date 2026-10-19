@@ -1,0 +1,40 @@
+"""Application configuration and environment settings."""
+
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    """Loads and validates environment settings for the Mound platform."""
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
+
+    app_env: str = "development"
+    app_port: int = 8000
+    debug: bool = True
+
+    # Database & Cache
+    database_url: str = "postgresql+asyncpg://arena_user:arena_password@localhost:5433/arena_db"
+    redis_url: str = "redis://localhost:6380/0"
+
+    # Embedding Model (sentence-transformers/all-MiniLM-L6-v2)
+    embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
+    embedding_dimensions: int = 384
+
+    # Rate Limiting
+    rate_limit_enabled: bool = True
+
+    # Linter
+    evidence_url_verification_enabled: bool = True
+
+    # Authentication & Security
+    jwt_secret_key: str = "mound_insecure_jwt_dev_secret_key_change_in_production_32b"
+    jwt_algorithm: str = "HS256"
+    jwt_access_token_expire_minutes: int = 1440  # 24 hours
+    google_client_id: str = ""
+
+
+settings = Settings()
